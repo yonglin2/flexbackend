@@ -19,5 +19,6 @@ from api import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    # url(r'^restaurants/', views.allrestaurants)
+    url(r'^restaurants/(?P<pk>[0-9]+)/$', views.restaurant_detail),
+    url(r'^restaurants/$', views.restaurant_list),
 ]
