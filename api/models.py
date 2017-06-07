@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Restaurant(models.Model):
@@ -10,6 +11,8 @@ class Restaurant(models.Model):
     place_id = models.IntegerField()
     user_likes = models.ManyToManyField(User, related_name='restaurant_likes')
 
+    def __str__(self):
+        return self.name
 # class Like(models.Model):
 #     user = models.ForeignKey(User)
 #     restaurant = models.ForeignKey(Restaurant)
