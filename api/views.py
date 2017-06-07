@@ -11,6 +11,7 @@ from api.serializers import RestaurantSerializer
 
 @api_view(['GET', 'POST', 'DELETE'])
 def restaurant_list(request):
+    debug
     """
     List all restaurants, or create a new restaurant.
     """
@@ -26,8 +27,6 @@ def restaurant_list(request):
 
     elif request.method == 'POST':
         # data = JSONParser().parse(request)
-        print("XXXXXXXXXXXXXXXXXXXXXXXXXXX")
-        print(request.data)
         serializer = RestaurantSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
