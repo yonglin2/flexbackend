@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from api.models import Restaurant
 from api.serializers import RestaurantSerializer
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'DELETE'])
 def restaurant_list(request):
     """
     List all restaurants, or create a new restaurant.
@@ -26,17 +26,20 @@ def restaurant_list(request):
 
     elif request.method == 'POST':
         # data = JSONParser().parse(request)
+        print("XXXXXXXXXXXXXXXXXXXXXXXXXXX")
+        print(request.data)
         serializer = RestaurantSerializer(data=request.data)
-        print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx')
         if serializer.is_valid():
-            print(serializer.validated_data)
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
 # Create your views here.
 
+@api_view(['GET', 'PUT', 'DELETE'])
 def restaurant_detail(request, pk):
+    print("XXXXXXXXXXXXXXXXXXXXXXXXXXX")
+    print(pk)
 
     try:
         restaurant = Restaurant.objects.get(pk=pk)
@@ -45,15 +48,14 @@ def restaurant_detail(request, pk):
 
     if request.method == 'GET':
         serializer = RestaurantSerializer(restaurant)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
     elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = RestaurantSerializer(restaurant, data=data)
+        serializer = RestaurantSerializer(restaurant, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
 
     elif request.method == 'DELETE':
         restaurant.delete()
