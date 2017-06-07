@@ -11,7 +11,6 @@ from api.serializers import RestaurantSerializer
 
 @api_view(['GET', 'POST', 'DELETE'])
 def restaurant_list(request):
-    debug
     """
     List all restaurants, or create a new restaurant.
     """
@@ -37,8 +36,6 @@ def restaurant_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def restaurant_detail(request, pk):
-    print("XXXXXXXXXXXXXXXXXXXXXXXXXXX")
-    print(pk)
 
     try:
         restaurant = Restaurant.objects.get(pk=pk)
