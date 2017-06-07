@@ -11,6 +11,7 @@ from api.serializers import RestaurantSerializer
 
 @api_view(['GET', 'POST', 'DELETE'])
 def restaurant_list(request):
+    debug
     """
     List all restaurants, or create a new restaurant.
     """
