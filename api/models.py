@@ -10,6 +10,7 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=100, default='')
     place_id = models.IntegerField()
     user_likes = models.ManyToManyField(User, related_name='restaurant_likes')
+    user_dislikes = models.ManyToManyField(User, related_name='restaurant_dislikes')
 
     def __str__(self):
         return self.name
