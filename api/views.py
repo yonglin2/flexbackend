@@ -28,10 +28,13 @@ def restaurant_list(request):
     """
     if request.method == 'GET':
         restaurants = Restaurant.objects.all()
-        # restaurants_dict = {}
-        # for restaurant in restaurants:
-        #     restaurants_dict[restaurant.id] = restaurant
-        #     print restaurant
+
+
+        # location filtering
+
+
+
+
         serializer = RestaurantSerializer(restaurants, many=True)
         return Response(serializer.data)
 
