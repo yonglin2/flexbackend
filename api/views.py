@@ -10,6 +10,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from api.models import Restaurant
 from api.serializers import RestaurantSerializer
+import pdb
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
