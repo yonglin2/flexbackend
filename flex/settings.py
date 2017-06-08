@@ -25,7 +25,7 @@ SECRET_KEY = '=3#g4ctdmceb+atv%j@f9$+va1atav#xz^tc-5xtpic14ooo4i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '*']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -136,7 +136,7 @@ ALLOWED_HOSTS = ['*']
 
 DEBUG = False
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+# try:
+#     from .local_settings import *
+# except ImportError:
+#     pass
