@@ -38,7 +38,7 @@ def restaurant_list(request):
 def restaurant_detail(request, pk):
 
     try:
-        restaurant = Restaurant.objects.get(pk=pk)
+        restaurant = Restaurant.objects.get(id=pk)
     except Restaurant.DoesNotExist:
         return HttpResponse(status=404)
 
