@@ -20,7 +20,7 @@ from rest_framework.authtoken import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'', include('api.urls')),
+    url(r'^api/', include('api.urls')),
     # url(r'^restaurants/$', views.restaurant_list),
     # url(r'^restaurants/(?P<pk>[0-9]+)/$', views.restaurant_detail),
     # url(r'^api-token-auth/', views.obtain_auth_token),

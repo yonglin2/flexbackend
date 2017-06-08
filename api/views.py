@@ -28,11 +28,32 @@ def restaurant_list(request):
     List all restaurants, or create a new restaurant.
     """
     if request.method == 'GET':
-        restaurants = Restaurant.objects.all()
-        # restaurants_dict = {}
-        # for restaurant in restaurants:
-        #     restaurants_dict[restaurant.id] = restaurant
-        #     print restaurant
+        # restaurants = Restaurant.objects.all()
+
+        # .015 lat/lng unit ~ 1 mile
+
+        north = float(request.GET['lat']) + .015
+        east = float(request.GET['lng']) + .015
+        south = float(request.GET['lat']) - .015
+        west = float(request.GET['lng']) - .015
+
+        # north = 2000
+        # east = 2000
+        # south = 50
+        # west = 50
+
+
+        # location filtering
+        restaurants = Restaurant.objects.filter(
+            lat__lte=north
+            ).filter(
+            lat__gte=south
+            ).filter(
+            lng__lte=east
+            ).filter(
+            lng__gte=west
+            )
+
         serializer = RestaurantSerializer(restaurants, many=True)
         return Response(serializer.data)
 
