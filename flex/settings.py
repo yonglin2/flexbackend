@@ -89,8 +89,8 @@ WSGI_APPLICATION = 'flex.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'flexbackend',
-        'USER': 'yong',
+        'NAME': 'glutenbackend',
+        'USER': 'allen',
         'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432',
