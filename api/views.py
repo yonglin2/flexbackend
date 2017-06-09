@@ -4,14 +4,14 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 # from django.http import HttpResponse, JsonResponse
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from api.models import Restaurant
-from api.serializers import RestaurantSerializer
-import pdb
-
+from django.forms.models import model_to_dict
+from django.contrib.auth.models import User
+from api.serializers import RestaurantSerializer, UserSerializer
 
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -21,6 +21,25 @@ class CustomObtainAuthToken(ObtainAuthToken):
                          'username': token.user.username,
                          'user_id': token.user.id,
                          })
+
+@api_view(['POST'])
+@authentication_classes(())
+@permission_classes(())
+def create_user(request):
+    serialized = UserSerializer(data=request.data, context={'request': request})
+    if serialized.is_valid():
+        #new user
+        user = User(
+            username=request.data['username'],
+            email=request.data['email'],
+        )
+        user.set_password(request.data['password'])
+        user.save()
+        serialized = UserSerializer(user)
+        token, created = Token.objects.get_or_create(user=serialized.instance)
+        return Response({'user': serialized.data, 'token': token.key}, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST', 'DELETE'])
 def restaurant_list(request):
