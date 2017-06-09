@@ -4,13 +4,13 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 # from django.http import HttpResponse, JsonResponse
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from api.models import Restaurant
-from api.serializers import RestaurantSerializer
-import pdb
+from api.models import Restaurant, Like, Dislike
+from api.serializers import RestaurantSerializer, LikeSerializer, DislikeSerializer, UserSerializer
+from django.contrib.auth.models import User
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
@@ -22,6 +22,25 @@ class CustomObtainAuthToken(ObtainAuthToken):
                          'user_id': token.user.id,
                          })
 
+@api_view(['POST'])
+@authentication_classes(())
+@permission_classes(())
+def create_user(request):
+    serialized = UserSerializer(data=request.data, context={'request': request})
+    if serialized.is_valid():
+        #new user
+        user = User(
+            username=request.data['username'],
+            email=request.data['email'],
+        )
+        user.set_password(request.data['password'])
+        user.save()
+        serialized = UserSerializer(user)
+        token, created = Token.objects.get_or_create(user=serialized.instance)
+        return Response({'user': serialized.data, 'token': token.key}, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET', 'POST', 'DELETE'])
 def restaurant_list(request):
     """
@@ -30,18 +49,11 @@ def restaurant_list(request):
     if request.method == 'GET':
         # restaurants = Restaurant.objects.all()
 
-        # .015 lat/lng unit ~ 1 mile
-
+    # .015 lat/lng unit ~ 1 mile
         north = float(request.GET['lat']) + .015
         east = float(request.GET['lng']) + .015
         south = float(request.GET['lat']) - .015
         west = float(request.GET['lng']) - .015
-
-        # north = 2000
-        # east = 2000
-        # south = 50
-        # west = 50
-
 
         # location filtering
         restaurants = Restaurant.objects.filter(
@@ -53,6 +65,7 @@ def restaurant_list(request):
             ).filter(
             lng__gte=west
             )
+
 
         serializer = RestaurantSerializer(restaurants, many=True)
         return Response(serializer.data)
@@ -90,3 +103,34 @@ def restaurant_detail(request, pk):
     elif request.method == 'DELETE':
         restaurant.delete()
         return HttpResponse(status=204)
+
+
+
+@api_view(['POST'])
+def create_like(request):
+
+
+    dislike_list = Dislike.objects.filter(user=request.data['user']).filter(restaurant=request.data['restaurant'])
+    for dislike in dislike_list:
+        dislike.delete()
+
+    if request.method == 'POST':
+        serializer = LikeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+
+@api_view(['POST'])
+def create_dislike(request):
+    like_list = Like.objects.filter(user=request.data['user']).filter(restaurant=request.data['restaurant'])
+    for like in like_list:
+        like.delete()
+
+    if request.method == 'POST':
+        serializer = DislikeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
