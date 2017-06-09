@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^api-token-auth/', views.CustomObtainAuthToken.as_view()),
     url(r'^newlike/$', views.create_like),
     url(r'^newdislike/$', views.create_dislike),
+    url(r'^signup/', views.create_user),
 ]
