@@ -30,18 +30,11 @@ def restaurant_list(request):
     if request.method == 'GET':
         # restaurants = Restaurant.objects.all()
 
-        # .015 lat/lng unit ~ 1 mile
-
+    # .015 lat/lng unit ~ 1 mile
         north = float(request.GET['lat']) + .015
         east = float(request.GET['lng']) + .015
         south = float(request.GET['lat']) - .015
         west = float(request.GET['lng']) - .015
-
-        # north = 2000
-        # east = 2000
-        # south = 50
-        # west = 50
-
 
         # location filtering
         restaurants = Restaurant.objects.filter(
@@ -53,6 +46,7 @@ def restaurant_list(request):
             ).filter(
             lng__gte=west
             )
+
 
         serializer = RestaurantSerializer(restaurants, many=True)
         return Response(serializer.data)
@@ -95,8 +89,10 @@ def restaurant_detail(request, pk):
 
 @api_view(['POST'])
 def create_like(request):
-    try:
-        dislike = Dislike.objects.get(user=request.data.user)
+
+
+    dislike_list = Dislike.objects.filter(user=request.data['user']).filter(restaurant=request.data['restaurant'])
+    for dislike in dislike_list:
         dislike.delete()
 
     if request.method == 'POST':
@@ -109,8 +105,8 @@ def create_like(request):
 
 @api_view(['POST'])
 def create_dislike(request):
-    try:
-        like = Like.objects.get(user=request.data.user)
+    like_list = Like.objects.filter(user=request.data['user']).filter(restaurant=request.data['restaurant'])
+    for like in like_list:
         like.delete()
 
     if request.method == 'POST':

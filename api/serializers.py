@@ -4,7 +4,7 @@ from api.models import Restaurant, Like, Dislike
 class RestaurantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'place_id', 'lat', 'lng')
+        fields = ('id', 'name', 'place_id', 'lat', 'lng', 'likes', 'dislikes')
     # name = serializers.CharField()
     # place_id = serializers.IntegerField()
 
