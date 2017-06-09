@@ -22,11 +22,27 @@ class Restaurant(models.Model):
     lat = models.FloatField()
     lng = models.FloatField()
     image_url = models.CharField(max_length=200, default='')
-    user_likes = models.ManyToManyField(User, related_name='restaurant_likes')
-    user_dislikes = models.ManyToManyField(User, related_name='restaurant_dislikes')
+    # user_likes = models.ManyToManyField(User, related_name='restaurant_likes')
+    # user_dislikes = models.ManyToManyField(User, related_name='restaurant_dislikes')
 
     def __str__(self):
         return self.name
+
+class Like(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    restaurant = models.ForeignKey(Restaurant, related_name='likes')
+    user = models.ForeignKey(User, related_name='liker')
+
+class Dislike(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    restaurant = models.ForeignKey(Restaurant, related_name='dislikes')
+    user = models.ForeignKey(User, related_name='disliker')
+
+
+
+
+
+
 # class Like(models.Model):
 #     user = models.ForeignKey(User)
 #     restaurant = models.ForeignKey(Restaurant)

@@ -8,10 +8,10 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from api.models import Restaurant
-from django.forms.models import model_to_dict
+from api.models import Restaurant, Like, Dislike
+from api.serializers import RestaurantSerializer, LikeSerializer, DislikeSerializer, UserSerializer
 from django.contrib.auth.models import User
-from api.serializers import RestaurantSerializer, UserSerializer
+
 
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -49,18 +49,11 @@ def restaurant_list(request):
     if request.method == 'GET':
         # restaurants = Restaurant.objects.all()
 
-        # .015 lat/lng unit ~ 1 mile
-
+    # .015 lat/lng unit ~ 1 mile
         north = float(request.GET['lat']) + .015
         east = float(request.GET['lng']) + .015
         south = float(request.GET['lat']) - .015
         west = float(request.GET['lng']) - .015
-
-        # north = 2000
-        # east = 2000
-        # south = 50
-        # west = 50
-
 
         # location filtering
         restaurants = Restaurant.objects.filter(
@@ -72,6 +65,7 @@ def restaurant_list(request):
             ).filter(
             lng__gte=west
             )
+
 
         serializer = RestaurantSerializer(restaurants, many=True)
         return Response(serializer.data)
@@ -109,3 +103,34 @@ def restaurant_detail(request, pk):
     elif request.method == 'DELETE':
         restaurant.delete()
         return HttpResponse(status=204)
+
+
+
+@api_view(['POST'])
+def create_like(request):
+
+
+    dislike_list = Dislike.objects.filter(user=request.data['user']).filter(restaurant=request.data['restaurant'])
+    for dislike in dislike_list:
+        dislike.delete()
+
+    if request.method == 'POST':
+        serializer = LikeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+
+@api_view(['POST'])
+def create_dislike(request):
+    like_list = Like.objects.filter(user=request.data['user']).filter(restaurant=request.data['restaurant'])
+    for like in like_list:
+        like.delete()
+
+    if request.method == 'POST':
+        serializer = DislikeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
