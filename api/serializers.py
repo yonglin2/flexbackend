@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Restaurant
+from api.models import Restaurant, Like, Dislike
 
 class RestaurantSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,3 +10,13 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
     # def create(self, validated_data):
     #     return Restaurant.objects.create(**validated_data)
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ('user', 'restaurant')
+
+class DislikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dislike
+        fields = ('user', 'restaurant')

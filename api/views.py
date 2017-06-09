@@ -8,8 +8,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from api.models import Restaurant
-from api.serializers import RestaurantSerializer
+from api.models import Restaurant, Like, Dislike
+from api.serializers import RestaurantSerializer, LikeSerializer, DislikeSerializer
 import pdb
 
 
@@ -90,3 +90,32 @@ def restaurant_detail(request, pk):
     elif request.method == 'DELETE':
         restaurant.delete()
         return HttpResponse(status=204)
+
+
+
+@api_view(['POST'])
+def create_like(request):
+    try:
+        dislike = Dislike.objects.get(user=request.data.user)
+        dislike.delete()
+
+    if request.method == 'POST':
+        serializer = LikeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+
+@api_view(['POST'])
+def create_dislike(request):
+    try:
+        like = Like.objects.get(user=request.data.user)
+        like.delete()
+
+    if request.method == 'POST':
+        serializer = DislikeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
