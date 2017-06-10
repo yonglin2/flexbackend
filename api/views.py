@@ -16,10 +16,13 @@ from django.contrib.auth.models import User
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
+        # import pdb; pdb.set_trace()
         token = Token.objects.get(key=response.data['token'])
+        status = response.status_code
         return Response({'token': token.key,
                          'username': token.user.username,
                          'user_id': token.user.id,
+                         'status': status
                          })
 
 @api_view(['POST'])
