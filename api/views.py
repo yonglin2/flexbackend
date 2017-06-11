@@ -58,7 +58,7 @@ def restaurant_list(request):
     if request.method == 'GET':
         # restaurants = Restaurant.objects.all()
 
-    # .015 lat/lng unit ~ 1 mile
+        # .015 lat/lng unit ~ 1 mile
         north = float(request.GET['lat']) + .015
         east = float(request.GET['lng']) + .015
         south = float(request.GET['lat']) - .015
@@ -75,13 +75,11 @@ def restaurant_list(request):
             lng__gte=west
             )
 
-
         serializer = RestaurantSerializer(restaurants, many=True)
         return Response(serializer.data)
 
 
     elif request.method == 'POST':
-        # data = JSONParser().parse(request)
         serializer = RestaurantSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -99,11 +97,6 @@ def restaurant_detail(request, pk):
         return HttpResponse(status=404)
 
     if request.method == 'GET':
-        # ids = []
-        #
-        # allLikes = restaurant.likes.all()
-        # for like in allLikes:
-        #     ids.append(like.user.id)
 
         serializer = RestaurantSerializer(restaurant)
         return Response(serializer.data)

@@ -9,12 +9,6 @@ class RestaurantSerializer(serializers.ModelSerializer):
         model = Restaurant
         fields = ('id', 'name', 'place_id', 'lat', 'lng', 'user_likes',
         'user_dislikes', 'address', 'phone_number', 'image_url')
-    # name = serializers.CharField()
-    # place_id = serializers.IntegerField()
-
-    # def create(self, validated_data):
-    #     return Restaurant.objects.create(**validated_data)
-
 
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
