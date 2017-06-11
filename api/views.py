@@ -99,6 +99,12 @@ def restaurant_detail(request, pk):
         return HttpResponse(status=404)
 
     if request.method == 'GET':
+        # ids = []
+        #
+        # allLikes = restaurant.likes.all()
+        # for like in allLikes:
+        #     ids.append(like.user.id)
+
         serializer = RestaurantSerializer(restaurant)
         return Response(serializer.data)
 
@@ -118,11 +124,15 @@ def restaurant_detail(request, pk):
 @api_view(['POST'])
 def create_like(request):
 
-    dislike_list = Dislike.objects.filter(user=request.data['user']).filter(restaurant=request.data['restaurant'])
-    for dislike in dislike_list:
-        dislike.delete()
+    # dislike_list = Dislike.objects.filter(user=request.data['user']).filter(restaurant=request.data['restaurant'])
+    # for dislike in dislike_list:
+    #     dislike.delete()
+    # userliked = User.objects.get(id=request.data['user_id'])
+    # restaurantliked = Restaurant.objects.get(id=request.data['restaurant_id'])
+    # Like.objects.create(user=userliked, restaurant=restaurantliked)
 
     if request.method == 'POST':
+        # serializer = LikeSerializer(data={'user':userliked, 'restaurant':restaurantliked})
         serializer = LikeSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
