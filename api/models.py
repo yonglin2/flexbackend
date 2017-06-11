@@ -21,8 +21,10 @@ class Restaurant(models.Model):
     place_id = models.CharField(max_length=500)
     lat = models.FloatField()
     lng = models.FloatField()
+    address = models.CharField(blank=True, max_length=200)
+    phone_number = models.CharField(blank=True, max_length=50)
     image_url = models.CharField(max_length=200, default='')
-    # user_likes = models.ManyToManyField(User, related_name='restaurant_likes')
+    # user_likes = models.ManyToManyField(User, related_name='restaurant_likes', through)
     # user_dislikes = models.ManyToManyField(User, related_name='restaurant_dislikes')
 
     def __str__(self):
@@ -42,11 +44,6 @@ class Dislike(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     restaurant = models.ForeignKey(Restaurant, related_name='dislikes')
     user = models.ForeignKey(User, related_name='disliker')
-
-
-
-
-
 
 # class Like(models.Model):
 #     user = models.ForeignKey(User)
