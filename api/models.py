@@ -24,7 +24,8 @@ class Restaurant(models.Model):
     address = models.CharField(blank=True, max_length=200)
     phone_number = models.CharField(blank=True, max_length=50)
     image_url = models.CharField(max_length=200, default='')
-    # user_likes = models.ManyToManyField(User, related_name='restaurant_likes', through)
+    user_likes = models.ManyToManyField(User, through='Like', related_name='restaurant_likes')
+    user_dislikes = models.ManyToManyField(User, through='Dislike', related_name='restaurant_dislikes')
     # user_dislikes = models.ManyToManyField(User, related_name='restaurant_dislikes')
 
     def __str__(self):

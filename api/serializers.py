@@ -4,12 +4,11 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import User
 
 class RestaurantSerializer(serializers.ModelSerializer):
-    name = 'yong'
 
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'place_id', 'lat', 'lng', 'likes',
-        'dislikes', 'address', 'phone_number', 'image_url')
+        fields = ('id', 'name', 'place_id', 'lat', 'lng', 'user_likes',
+        'user_dislikes', 'address', 'phone_number', 'image_url')
     # name = serializers.CharField()
     # place_id = serializers.IntegerField()
 
