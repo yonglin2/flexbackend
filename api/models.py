@@ -26,15 +26,10 @@ class Restaurant(models.Model):
     image_url = models.CharField(max_length=200, default='')
     user_likes = models.ManyToManyField(User, through='Like', related_name='restaurant_likes')
     user_dislikes = models.ManyToManyField(User, through='Dislike', related_name='restaurant_dislikes')
-    # user_dislikes = models.ManyToManyField(User, related_name='restaurant_dislikes')
 
     def __str__(self):
         return self.name
 
-# Like.objects.create(user=yong, restaurant=tokyo)
-
-# TODO: change likes/dislikes model to have id's instead of objects
-# TODO: In restaurant model, add address, phone_number, array of likers id, array of dislikers id
 
 class Like(models.Model):
     created = models.DateTimeField(auto_now_add=True)

@@ -56,7 +56,7 @@ def restaurant_list(request):
     List all restaurants, or create a new restaurant.
     """
     if request.method == 'GET':
-        # restaurants = Restaurant.objects.all()
+        restaurants = Restaurant.objects.all()
 
         # .015 lat/lng unit ~ 1 mile
         north = float(request.GET['lat']) + .015
@@ -65,15 +65,15 @@ def restaurant_list(request):
         west = float(request.GET['lng']) - .015
 
         # location filtering
-        restaurants = Restaurant.objects.filter(
-            lat__lte=north
-            ).filter(
-            lat__gte=south
-            ).filter(
-            lng__lte=east
-            ).filter(
-            lng__gte=west
-            )
+        # restaurants = Restaurant.objects.filter(
+        #     lat__lte=north
+        #     ).filter(
+        #     lat__gte=south
+        #     ).filter(
+        #     lng__lte=east
+        #     ).filter(
+        #     lng__gte=west
+        #     )
 
         serializer = RestaurantSerializer(restaurants, many=True)
         return Response(serializer.data)
@@ -111,8 +111,6 @@ def restaurant_detail(request, pk):
     elif request.method == 'DELETE':
         restaurant.delete()
         return HttpResponse(status=204)
-
-
 
 @api_view(['POST'])
 def create_like(request):
