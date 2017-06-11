@@ -39,8 +39,13 @@ def create_user(request):
         user.set_password(request.data['password'])
         user.save()
         serialized = UserSerializer(user)
+        username = serialized.data['username']
+        user_id = serialized.data['id']
         token, created = Token.objects.get_or_create(user=serialized.instance)
-        return Response({'user': serialized.data, 'token': token.key, 'status': status.HTTP_201_CREATED},
+        return Response({'username': username,
+                         'user_id': user_id,
+                         'token': token.key,
+                         'status': status.HTTP_201_CREATED},
         status=status.HTTP_201_CREATED)
     else:
         return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
@@ -112,7 +117,6 @@ def restaurant_detail(request, pk):
 
 @api_view(['POST'])
 def create_like(request):
-
 
     dislike_list = Dislike.objects.filter(user=request.data['user']).filter(restaurant=request.data['restaurant'])
     for dislike in dislike_list:

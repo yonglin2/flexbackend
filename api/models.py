@@ -28,6 +28,11 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
 
+# Like.objects.create(user=yong, restaurant=tokyo)
+
+# TODO: change likes/dislikes model to have id's instead of objects
+# TODO: In restaurant model, add address, phone_number, array of likers id, array of dislikers id
+
 class Like(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     restaurant = models.ForeignKey(Restaurant, related_name='likes')

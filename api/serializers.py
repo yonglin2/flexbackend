@@ -3,7 +3,6 @@ from api.models import Restaurant, Like, Dislike
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import User
 
-
 class RestaurantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
@@ -46,4 +45,3 @@ class UserSerializer(serializers.ModelSerializer):
             'password': {'write_only': True},
             'email': {'write_only': True},
         }
-
