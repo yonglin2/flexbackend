@@ -59,10 +59,10 @@ def restaurant_list(request):
         restaurants = Restaurant.objects.all()
 
         # .015 lat/lng unit ~ 1 mile
-        north = float(request.GET['lat']) + .015
-        east = float(request.GET['lng']) + .015
-        south = float(request.GET['lat']) - .015
-        west = float(request.GET['lng']) - .015
+        # north = float(request.GET['lat']) + .015
+        # east = float(request.GET['lng']) + .015
+        # south = float(request.GET['lat']) - .015
+        # west = float(request.GET['lng']) - .015
 
         # location filtering
         # restaurants = Restaurant.objects.filter(
